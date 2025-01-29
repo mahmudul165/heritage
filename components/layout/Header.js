@@ -1,204 +1,149 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import Nav from "react-bootstrap/Nav";
-import NavDropdown from "react-bootstrap/NavDropdown";
-import Navbar from "react-bootstrap/Navbar";
-import Offcanvas from "react-bootstrap/Offcanvas";
-import { FaShoppingCart } from "react-icons/fa";
-import { useCart } from "react-use-cart";
-import CartItemsModal from "../common/CartItemsModal";
+import { Navbar, Nav, NavDropdown, Offcanvas } from "react-bootstrap";
 import Logo from "/public/main-logo.png";
 import { useRouter } from "next/router";
+
 function Header() {
-  // start header
   const [scroll, setScroll] = useState(false);
-  const [modalShow, setModalShow] = useState(false);
   const router = useRouter();
-  const handleClick = () => {
-    const sidebar = document.querySelector(".offcanvas");
-    const body = document.querySelector("body");
 
-    console.log({ sidebar });
-
-    const isCollapse = sidebar.classList.contains("show");
-    const offcanvasDiv = document.querySelector(".offcanvas-backdrop");
-    const isShow = offcanvasDiv.classList.contains("show");
-
-    if (isCollapse) {
-      sidebar.classList.remove("show");
-      offcanvasDiv.classList.remove("show");
-      body.click();
-    } else if (!isCollapse && !isShow) {
-      sidebar.classList.add("show");
-      offcanvasDiv.classList.add("show");
-      sidebar.classList.add("offcanvas-toggling");
-    }
-  };
   useEffect(() => {
+    const handleScroll = () => {
+      setScroll(window.pageYOffset > 50);
+    };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleScroll = () => {
-    if (window.pageYOffset > 0) {
-      setScroll(true);
-    } else {
-      setScroll(false);
-    }
-  };
-  // end header
-  const {
-    isEmpty,
-    totalUniqueItems,
-    items,
-    totalItems,
-    cartTotal,
-    updateItemQuantity,
-    removeItem,
-    emptyCart,
-  } = useCart();
   return (
     <>
-      <CartItemsModal show={modalShow} onHide={() => setModalShow(false)} />
-      {["lg"].map((expand) => (
-        <Navbar
-          key={expand}
-          sticky="top"
-          // bg="light"
-          expand={expand}
-          // className="  fs-6 fw-bold text-danger  navPosition"
-          className={`row align-items-center    m-auto   navPosition py-2 ${
-            scroll
-              ? " bg-light container-fluid py-3 add-transition "
-              : "container  add-transition-1 "
-          }`}
-        >
-           <div className="col-lg-2  col-sm-2  col-2">
-            <Nav
-              className="m-auto align-items-center  justify-content-center "
-              as="ul"
-            >
-              {" "}
-              <Nav.Item as="li" className="d-flex cus-app-logo ">
-                <Link href="/">
-                  <Image
-                    src={Logo}
-                    alt="logo"
-                    width={120}
-                    height={120}
-                    layout={500}
-                  />
-                </Link>
-              </Nav.Item>
-            </Nav>
-          </div>
-          <div className="col-lg-5  d-md-none d-lg-block   d-none   ">
-            <Nav className=" justify-content-end " as="ul">
-              <Nav.Item
-                as="li"
-                className={`${router.pathname === "/" ? "active-li" : ""}`}
-              >
-                <Nav.Link as="span">
-                  <Link href={"/"}>Home</Link>
-                </Nav.Link>
-              </Nav.Item>        
+      <Navbar
+        sticky="top"
+        expand="lg"
+        className={`navbar-custom py-0 ${scroll ? "scrolled" : ""}`}
+      >
+        <div className="container">
+          {/* Logo */}
+          <Navbar.Brand as={Link} href="/">
+            <Image src={Logo} alt="Logo" width={130} height={65} className="logo" />
+          </Navbar.Brand>
 
-              <Nav.Link
-                as="span"
-                className={`${
-                  router.pathname === "/about" ? "active-li" : ""
-                } text-nowrap`}
-              >
-                <Link href={"/about"}>About us</Link>
-              </Nav.Link>
-              <NavDropdown
-  title="Quick Links"
-  id="collasible-nav-dropdown"
-  className={`${router.pathname === "/our-business" ? "active-li" : ""}`}
->
-<NavDropdown.Item as="li">
-    <Link href="https://airheritage.com.bd" passHref target="_blank">
-      <img src="https://www.heritageairexpress.com/imgs/heritage-air-express.png" alt="Air Heritage" width="300" />
-    </Link>
-  </NavDropdown.Item>
-  <NavDropdown.Item as="li">
-    <Link href="https://flyheritage.net/" passHref target="_blank">
-      <img src="https://www.heritageairexpress.com/imgs/flyheritage.png" alt="Fly Heritage" width="300" />
-    </Link>
-  </NavDropdown.Item>
-  
-    <NavDropdown.Item as="li">
-    <Link href="https://sultantea.com.bd" passHref target="_blank">
-      <img src="https://www.heritageairexpress.com/imgs/sultan-tea.png" alt="Sultan Tea" width="300" />
-    </Link>
-  </NavDropdown.Item>
-</NavDropdown>
+          {/* Mobile Toggle */}
+          <Navbar.Toggle aria-controls="navbar-offcanvas" />
 
-            </Nav>
-          </div>
-            
-          <div className="col-lg-5  col-sm-2   col-3">
-            <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} />
-            <Navbar.Offcanvas
-              id={`offcanvasNavbar-expand-${expand}`}
-              aria-labelledby={`offcanvasNavbarLabel-expand-${expand}`}
-              placement="end"
-            >
-              <Offcanvas.Header closeButton>
-                <Offcanvas.Title id={`offcanvasNavbarLabel-expand-${expand}`}>
-                  Sultan Tea
-                </Offcanvas.Title>
-              </Offcanvas.Header>
-              <Offcanvas.Body>
-                {/* <Nav className=" justify-content-center "> */}
-                <div className="  d-block  d-lg-none d-md-block  d-xs-block ">
-                  <Nav as="ul">
-                    <Nav.Item
-                      as="li"
-                      className={`${
-                        router.pathname === "/" ? "active-li" : ""
-                      }`}
-                    >
-                      <Nav.Link as="span">
-                        <Link href={"/"}>Home</Link>
-                      </Nav.Link>
-                    </Nav.Item>
+          {/* Offcanvas Menu */}
+          <Navbar.Offcanvas id="navbar-offcanvas" placement="end">
+            <Offcanvas.Header closeButton>
+              <Offcanvas.Title className="fs-4 fw-bold text-dark">Sultan Tea</Offcanvas.Title>
+            </Offcanvas.Header>
+            <Offcanvas.Body>
+              <Nav className="ms-auto align-items-center">
+                <Nav.Item>
+                  <Nav.Link as={Link} href="/" className={router.pathname === "/" ? "active" : ""}>
+                    Home
+                  </Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                  <Nav.Link as={Link} href="/about" className={router.pathname === "/about" ? "active" : ""}>
+                    About Us
+                  </Nav.Link>
+                </Nav.Item>
 
-                    <NavDropdown
-                      title="About Us"
-                      id="collasible-nav-dropdown"
-                      className={`${
-                        router.pathname === "/about" ? "active-li" : ""
-                      }`}
-                    >
-                      <NavDropdown.Item as="li">
-                        <Link href={"/about"}>About Sultan Tea</Link>
-                      </NavDropdown.Item>
-                      {/* <NavDropdown.Divider /> */}
-                      <NavDropdown.Item as="li">
-                        <Link href={"/press-releases"}>Press Releases</Link>
-                      </NavDropdown.Item>
-                    </NavDropdown>
+                {/* Quick Links Dropdown */}
+                <NavDropdown title="Quick Links" id="quick-links" className="custom-dropdown">
+                  <div className="dropdown-wrapper">
+                    <NavDropdown.Item as="li">
+                      <Link href="https://airheritage.com.bd" target="_blank">
+                        <img src="https://www.heritageairexpress.com/imgs/heritage-air-express.png" alt="Air Heritage" width="150" />
+                      </Link>
+                    </NavDropdown.Item>
+                    <NavDropdown.Item as="li">
+                      <Link href="https://flyheritage.net/" target="_blank">
+                        <img src="https://www.heritageairexpress.com/imgs/flyheritage.png" alt="Fly Heritage" width="150" />
+                      </Link>
+                    </NavDropdown.Item>
+                    <NavDropdown.Item as="li">
+                      <Link href="https://sultantea.com.bd" target="_blank">
+                        <img src="https://www.heritageairexpress.com/imgs/sultan-tea.png" alt="Sultan Tea" width="150" />
+                      </Link>
+                    </NavDropdown.Item>
+                  </div>
+                </NavDropdown>
 
-                  
-                  </Nav>
-                </div>
-              
-                <Nav.Link
-                  as="span"
-                  className={`${
-                    router.pathname === "/contact" ? "active-li" : ""
-                  } text-nowrap`}
-                >
-                  <Link href={"/contact"}>Contact Us</Link>
-                </Nav.Link>
-              
-              </Offcanvas.Body>
-            </Navbar.Offcanvas>
-          </div>
-        </Navbar>
-      ))}
+                <Nav.Item>
+                  <Nav.Link as={Link} href="/contact" className={router.pathname === "/contact" ? "active" : ""}>
+                    Contact Us
+                  </Nav.Link>
+                </Nav.Item>
+              </Nav>
+            </Offcanvas.Body>
+          </Navbar.Offcanvas>
+        </div>
+      </Navbar>
+
+      {/* Styling */}
+      <style jsx>{`
+        .navbar-custom {
+          background: white;
+          transition: all 0.3s ease-in-out;
+        }
+        .navbar-custom.scrolled {
+          background: rgba(255, 255, 255, 0.95);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .logo {
+          transition: transform 0.3s ease;
+        }
+        .logo:hover {
+          transform: scale(1.08);
+        }
+        .active {
+          font-weight: bold;
+          color: #007bff !important;
+        }
+        .nav-link {
+          font-size: 16px;
+          padding: 10px 20px;
+          font-weight: 500;
+          transition: color 0.3s ease, transform 0.2s ease-in-out;
+        }
+        .nav-link:hover {
+          color: #007bff;
+          transform: translateY(-2px);
+        }
+        .custom-dropdown .dropdown-menu {
+          border-radius: 10px;
+          box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+          border: none;
+          animation: fadeIn 0.3s ease-in-out;
+        }
+        .dropdown-wrapper {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          padding: 10px;
+        }
+        .custom-dropdown .dropdown-item img {
+          transition: transform 0.3s ease-in-out;
+        }
+        .custom-dropdown .dropdown-item img:hover {
+          transform: scale(1.05);
+        }
+
+        /* Smooth Fade In Animation */
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(-5px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
     </>
   );
 }
