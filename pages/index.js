@@ -77,39 +77,39 @@ import TeaLogo from "/public/logo-company.jpg";
 import HeritageGP from "/public/heritage-gp.png";
 const inter = Inter({ subsets: ["latin"] });
 
-export const getStaticProps = async () => {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-  const apiUrl = `${baseUrl}/api/v1/brand`;
-  console.log('Fetching data from:', apiUrl);
+// export const getStaticProps = async () => {
+//   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+//   const apiUrl = `${baseUrl}/api/v1/brand`;
+//   console.log('Fetching data from:', apiUrl);
 
-  try {
-    const res = await fetch(apiUrl);
+//   try {
+//     const res = await fetch(apiUrl);
 
-    if (!res.ok) {
-      console.error('Failed to fetch data:', res.statusText);
-      return {
-        notFound: true,
-      };
-    }
+//     if (!res.ok) {
+//       console.error('Failed to fetch data:', res.statusText);
+//       return {
+//         notFound: true,
+//       };
+//     }
 
-    const brand = await res.json();
-    return {
-      props: { brand },
-      revalidate: 3,
-    };
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    return {
-      props: { brand: [] }, // Return an empty array or handle the error as needed
-      revalidate: 3,
-    };
-  }
-};
-
-
+//     const brand = await res.json();
+//     return {
+//       props: { brand },
+//       revalidate: 3,
+//     };
+//   } catch (error) {
+//     console.error('Error fetching data:', error);
+//     return {
+//       props: { brand: [] }, // Return an empty array or handle the error as needed
+//       revalidate: 3,
+//     };
+//   }
+// };
 
 
-export default function Home({ brand }) {
+
+
+export default function Home() {
   return (
     <>
       <Head>
