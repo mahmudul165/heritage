@@ -65,7 +65,7 @@ import Head from "next/head";
 import Image from "next/image";
 import { Inter } from "@next/font/google";
 import styles from "@/styles/Home.module.css";
-import OurbusinessShowcase from "@/components/our-brand/BusinessShowcase.js";
+//import OurbusinessShowcase from "@/components/our-brand/BusinessShowcase.js";
 import Hero from "@/components/home/hero/Hero";
 import Outlet from "@/components/home/our-outlet/Outlet";
 import Banner from "@/components/home/banner/Banner";
